@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write        # ← add this!
+      packages: write
+    # Only run if Dockerfile exists in the repo
+    if: ${{ exists('Dockerfile') }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
