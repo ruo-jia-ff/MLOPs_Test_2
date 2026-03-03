@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 
 RUN git clone https://github.com/ruo-jia-ff/MLOPs_TOOLS.git /MLOPs_TOOLS
-RUN git clone https://github.com/ruo-jia-ff/MLOPs_Test.git /MLOPs_TEST
+RUN git clone https://github.com/ruo-jia-ff/MLOPs_Test_2.git /MLOPs_TEST
 
 # Stage 2: Final stage
 FROM python:3.11-slim
