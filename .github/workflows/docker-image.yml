@@ -31,10 +31,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          IMAGE_NAME_SANITIZED=${IMAGE_NAME// /-}
+          IMAGE_NAME_SANITIZED=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
           docker build -t ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SANITIZED:latest .
 
       - name: Push Docker image to GitHub Container Registry
         run: |
-          IMAGE_NAME_SANITIZED=${IMAGE_NAME// /-}
+          IMAGE_NAME_SANITIZED=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
           docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SANITIZED:latest
