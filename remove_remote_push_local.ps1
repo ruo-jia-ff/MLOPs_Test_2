@@ -49,7 +49,7 @@ git add --all
 $status = git status --porcelain
 if ($status) {
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    git commit -m "chore: replace remote contents with local [$timestamp]"
+    git commit -m "Adding local repo: [$timestamp]"
     git push $Remote $Branch
     Write-Host "Push complete." -ForegroundColor Green
 } else {
