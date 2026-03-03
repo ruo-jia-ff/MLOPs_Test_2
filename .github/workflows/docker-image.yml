@@ -31,8 +31,10 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest .
+          IMAGE_NAME_SANITIZED=${IMAGE_NAME// /-}
+          docker build -t ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SANITIZED:latest .
 
       - name: Push Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:latest
+          IMAGE_NAME_SANITIZED=${IMAGE_NAME// /-}
+          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_SANITIZED:latest
