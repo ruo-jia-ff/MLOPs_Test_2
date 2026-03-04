@@ -48,6 +48,7 @@ jobs:
           az storage blob upload \
             --account-name "${{secrets.AZURE_ACCOUNT_NAME}}" \
             --container-name "${{secrets.AZURE_CONTAINER_NAME}}" \
+            --auth-mode key \
             --name "$IMAGE_FILE_NAME" \
             --file "$IMAGE_FILE_NAME" \
             --sas-token "${{secrets.AZURE_BLOB_SAS_TOKEN}}"
