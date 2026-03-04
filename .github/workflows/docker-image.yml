@@ -41,7 +41,8 @@ jobs:
       - name: Upload tar to Azure Blob Storage
         uses: azure/storage-blob-upload@v1
         with:
-          connection-string: ${{ secrets.AZURE_BLOB_SAS_URL }}  # Use the SAS URL secret
-          container-name: docker-images-training
+          connection-string: ${{ secrets.AZURE_BLOB_SAS_URL }}  # Blob SAS URL
+          container-name: docker-images-training  # Correct container name
           source: "${IMAGE_NAME_TAG}.tar"
           blob-name: "${IMAGE_NAME_TAG}.tar"
+
