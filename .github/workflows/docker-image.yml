@@ -1,4 +1,4 @@
-name: Build and Push Docker Image to GitHub Container Registry
+name: Build and Push Docker Image to Azure Blob Storage
 on:
   push:
     branches:
@@ -10,42 +10,45 @@ jobs:
     permissions:
       contents: read
       packages: write
+
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Read image name from README.md
       - name: Read image name from README.md
         id: read_image_name
         run: |
           # Find first non-header line in README.md
           IMAGE_NAME=$(grep -v '^#' README.md | grep -v '^\s*$' | head -n 1)
-          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_ENV
+          echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
         shell: bash
 
+      # Step 3: Sanitize image name and add timestamp and run
       - name: Sanitize image name and add timestamp
         run: |
           # Convert to lowercase and replace spaces with -
-          IMAGE_NAME_SANITIZED=$(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+          IMAGE_NAME_SANITIZED=$(echo "${{steps.read_image_name.outputs.IMAGE_NAME}}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+          
           # Add UTC timestamp
           TIME_STAMP=$(date -u +"%Y-%m-%d-%H-%M-%S")
           IMAGE_NAME_TAG="${IMAGE_NAME_SANITIZED}:${TIME_STAMP}"
           echo "IMAGE_NAME_TAG=$IMAGE_NAME_TAG" >> $GITHUB_ENV
           echo "Sanitized image with timestamp: $IMAGE_NAME_TAG"
-        shell: bash
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          # Build the docker image
+          docker build -t $IMAGE_NAME_TAG .
 
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_TAG .
-        shell: bash
-
-      - name: Push Docker image to GitHub Container Registry
-        run: |
-          docker push ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_TAG
+          # Save the Docker image as a tarball
+          IMAGE_FILE_NAME="${IMAGE_NAME_SANITIZED}_${TIME_STAMP}.tar"
+          docker save -o $IMAGE_FILE_NAME $IMAGE_NAME_TAG
+          
+          # Upload the tarball to Azure Blob Storage
+          az storage blob upload \
+            --account-name "${{secrets.AZURE_ACCOUNT_NAME}}" \
+            --container-name "${{secrets.AZURE_CONTAINER_NAME}}" \
+            --name "$IMAGE_FILE_NAME" \
+            --file "$IMAGE_FILE_NAME" \
+            --sas-token "${{secrets.AZURE_BLOB_SAS_TOKEN}}"
         shell: bash
