@@ -1,0 +1,3 @@
+TEST_SIZE=0.15
+USE_GPU=true
+ROTATE=false

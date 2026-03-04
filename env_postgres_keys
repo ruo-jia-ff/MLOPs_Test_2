@@ -1,0 +1,3 @@
+TRAIN_LOG_TABLE="ml_training_table"
+TRAIN_DATABASE="ml_training_test"
+TRAIN_LOG_KEYS='["project_name", "run_id", "epoch", "val_loss", "val_acc", "learning_rate", "checkpoint_path", "checkpoint_upload_success", "checkpoint_upload_error", "average_train_loss", "average_train_accuracy"]'
