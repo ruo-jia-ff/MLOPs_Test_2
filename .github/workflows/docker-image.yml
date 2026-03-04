@@ -42,7 +42,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t $IMAGE_NAME_TAG .
+          docker build -t ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME_TAG .
         shell: bash
 
       - name: Push Docker image to GitHub Container Registry
