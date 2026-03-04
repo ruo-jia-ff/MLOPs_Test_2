@@ -23,7 +23,7 @@ jobs:
           echo "IMAGE_NAME=$IMAGE_NAME" >> $GITHUB_OUTPUT
           
           # Get the description (everything after the first non-header line)
-          DESCRIPTION=$(grep -v '^#' README.md | grep -v '^\s*$' | tail -n +3 | tr '\n' ' ')
+          DESCRIPTION=$(grep -v '^#' README.md | grep -v '^\s*$' | tail -n +1 | tr '\n' ' ')
           echo "DESCRIPTION=$DESCRIPTION" >> $GITHUB_OUTPUT
           
         shell: bash
