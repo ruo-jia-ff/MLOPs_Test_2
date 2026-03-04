@@ -33,7 +33,7 @@ jobs:
         run: |
           # Sanitize name and build tag
           IMAGE_NAME_SANITIZED=$(echo "${{ steps.read_image_name.outputs.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
-          DESCRIPTION=${{ steps.read_image_name.outputs.IMAGE_NAME }}
+          DESCRIPTION="${{ steps.read_image_name.outputs.IMAGE_NAME }}"
           TIME_STAMP=$(date -u +"%Y-%m-%d-%H-%M-%S")
           IMAGE_NAME_TAG="${IMAGE_NAME_SANITIZED}:${TIME_STAMP}"
           echo "Image tag: $IMAGE_NAME_TAG"
