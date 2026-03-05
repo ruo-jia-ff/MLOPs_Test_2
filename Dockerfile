@@ -1,15 +1,15 @@
 # Stage 1: Build stage
 FROM python:3.11-slim as build-stage
 
-# Install dependencies to fix OpenCV error (libGL, libsm6, libxext6, and libglib2.0-0)
+# Copy the repos to be packaged
 RUN apt-get update && apt-get install -y \
     git \
     bash \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
+COPY github_repo.txt /tmp/github_repo.txt
 RUN git clone https://github.com/ruo-jia-ff/MLOPs_TOOLS.git /MLOPs_TOOLS
-RUN git clone https://github.com/ruo-jia-ff/MLOPs_Test_2.git /MLOPs_TEST
+RUN git clone $(cat /tmp/github_repo.txt) /MLOPs_TEST
 
 # Stage 2: Final stage
 FROM python:3.11-slim
