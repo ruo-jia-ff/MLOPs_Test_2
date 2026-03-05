@@ -68,15 +68,17 @@ jobs:
           INSERT INTO ml_jobs_table(
               docker_image_name,
               docker_image_blob_path,
-              docker_image_description
+              docker_image_description,
+              job_status
           )
           VALUES (
               '$IMAGE_NAME_SANITIZED',
               'https://${{ secrets.AZURE_ACCOUNT_NAME }}.blob.core.windows.net/${{ secrets.AZURE_CONTAINER_NAME }}/$IMAGE_FILE_NAME',
-              '$DESCRIPTION'
+              '$DESCRIPTION',
+              'Queued'
           );
           
-          NOTIFY ml_tasks, 'check blob: ${{ secrets.AZURE_ACCOUNT_NAME }}.blob.core.windows.net/${{ secrets.AZURE_CONTAINER_NAME }}/$IMAGE_FILE_NAME';
+          NOTIFY ml_tasks, '${{ secrets.AZURE_ACCOUNT_NAME }}.blob.core.windows.net/${{ secrets.AZURE_CONTAINER_NAME }}/$IMAGE_FILE_NAME';
           COMMIT;
           EOF
         shell: bash
