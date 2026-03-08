@@ -10,6 +10,17 @@ jobs:
       contents: read
       packages: write
     steps:
+    
+    # Step 0: Free up Space
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/hostedtoolcache
+          docker system prune -af || true
+          df -h
+    
       # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
@@ -54,7 +65,13 @@ jobs:
             --sas-token "${{ secrets.AZURE_BLOB_SAS_TOKEN }}" \
             --overwrite
 
-          # Insert the details into PostgreSQL (ml_jobs_table)
+          # Remove local docker image and tar to free disk
+          docker rmi "$IMAGE_NAME_TAG" || true
+          rm -f "$IMAGE_FILE_NAME"
+
+          # Remove Docker build cache
+          docker system prune -af || true
+
           # Insert the details into PostgreSQL (ml_jobs_table) AND notify listeners
           psql "host=${{ secrets.AZURE_POSTGRES_HOST }} \
                 port=${{ secrets.AZURE_POSTGRES_PORT }} \
