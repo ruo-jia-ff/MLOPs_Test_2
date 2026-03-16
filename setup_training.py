@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 
 # Decide which env file to load
-load_dotenv(".env.data")
-load_dotenv(".env.postgres.train")
+# load_dotenv(".env.data")
+# load_dotenv(".env.postgres.train")
 load_dotenv("/app/env_folder/.env.data")
 load_dotenv("/app/env_folder/.env.postgres.train")
 
