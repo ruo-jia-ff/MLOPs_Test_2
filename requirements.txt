@@ -17,3 +17,5 @@ torchvision==0.17.1+cu118
 # ONNX for production
 onnx==1.14.1
 onnxruntime-gpu==1.17.0
+
+python-dotenv==1.0.1
